@@ -1,6 +1,8 @@
 import json
 import urllib.request
+
 from risk_score import calculate_risk
+from telegram_alert import send_telegram_alert
 
 
 FIREBASE_URL = (
@@ -29,9 +31,7 @@ def get_rain_score():
     with urllib.request.urlopen(OPEN_METEO_URL, timeout=10) as response:
         data = json.loads(response.read().decode())
 
-    rain_probability = data["hourly"]["precipitation_probability"][0]
-
-    return rain_probability
+    return data["hourly"]["precipitation_probability"][0]
 
 
 def update_firebase(drain_id, risk_score, status):
@@ -40,6 +40,30 @@ def update_firebase(drain_id, risk_score, status):
     data = {
         "risk_score": risk_score,
         "status": status
+    }
+
+    payload = json.dumps(data).encode("utf-8")
+
+    request = urllib.request.Request(
+        url,
+        data=payload,
+        headers={"Content-Type": "application/json"},
+        method="PATCH"
+    )
+
+    with urllib.request.urlopen(request, timeout=10) as response:
+        return json.loads(response.read().decode())
+
+
+def get_previous_status(drain_data):
+    return drain_data.get("last_alert_status", "GREEN")
+
+
+def update_alert_status(drain_id, status):
+    url = f"{FIREBASE_URL}/drains/{drain_id}.json"
+
+    data = {
+        "last_alert_status": status
     }
 
     payload = json.dumps(data).encode("utf-8")
@@ -68,6 +92,8 @@ def main():
 
         blockage = drain_data.get("blockage", 0)
 
+        previous_status = get_previous_status(drain_data)
+
         risk_score, status = calculate_risk(
             blockage,
             rain_score
@@ -83,6 +109,21 @@ def main():
         update_firebase(
             drain_id,
             risk_score,
+            status
+        )
+
+        # Send Telegram only when status changes to RED
+        if status == "RED" and previous_status != "RED":
+            print("RED status detected. Sending Telegram alert...")
+
+            send_telegram_alert(
+                drain_id,
+                blockage,
+                risk_score
+            )
+
+        update_alert_status(
+            drain_id,
             status
         )
 
