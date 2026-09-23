@@ -13,7 +13,7 @@ def send_telegram_alert(drain_id, blockage, risk_score):
         raise ValueError("Telegram credentials are missing.")
 
     message = (
-        "🚨 Smart Drain Guard Alert\n\n"
+        " Smart Drain Guard Alert\n\n"
         f"Drain: {drain_id}\n"
         f"Blockage: {blockage}%\n"
         f"Risk Score: {risk_score}\n"
