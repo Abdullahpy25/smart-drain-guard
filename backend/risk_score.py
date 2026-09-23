@@ -39,24 +39,25 @@ def rain_score_from_forecast(rain_probability):
 # TEST CASES
 # -------------------------
 
-test_cases = [
-    (0, 0),
-    (30, 20),
-    (60, 40),
-    (90, 30),
-    (50, 80),
-    (80, 80),
-]
+if __name__ == "__main__":
+    test_cases = [
+        (0, 0),
+        (30, 20),
+        (60, 40),
+        (90, 30),
+        (50, 80),
+        (80, 80),
+    ]
 
-print("RISK CALCULATION TESTS")
-print("-" * 50)
+    print("RISK CALCULATION TESTS")
+    print("-" * 50)
 
-for blockage, rain_score in test_cases:
-    score, status = calculate_risk(blockage, rain_score)
+    for blockage, rain_score in test_cases:
+        score, status = calculate_risk(blockage, rain_score)
 
-    print(
-        f"Blockage: {blockage}% | "
-        f"Rain Score: {rain_score} | "
-        f"Risk Score: {score} | "
-        f"Status: {status}"
-    )
+        print(
+            f"Blockage: {blockage}% | "
+            f"Rain Score: {rain_score} | "
+            f"Risk Score: {score} | "
+            f"Status: {status}"
+        )
