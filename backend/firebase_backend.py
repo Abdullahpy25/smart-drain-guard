@@ -176,7 +176,7 @@ def main():
     print("===================================")
     print(" SMART DRAIN GUARD BACKEND")
     print(" Automatic monitoring started")
-    print(" Check interval: 2 minutes")
+    print(" Check interval: 10 seconds")
     print("===================================")
 
     last_rain_score = None
