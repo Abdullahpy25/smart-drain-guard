@@ -21,7 +21,7 @@ OPEN_METEO_URL = (
     "&timezone=Asia%2FKolkata"
 )
 
-CHECK_INTERVAL = 120  # 2 minutes
+CHECK_INTERVAL = 10 # 10 seconds
 
 
 def get_firebase_data():
