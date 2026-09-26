@@ -17,7 +17,7 @@ OPEN_METEO_URL = (
     "?latitude=12.9716"
     "&longitude=77.5946"
     "&hourly=precipitation_probability"
-    "&forecast_hours=1"
+    "&forecast_hours=6"
     "&timezone=Asia%2FKolkata"
 )
 
@@ -35,7 +35,9 @@ def get_rain_score():
     with urllib.request.urlopen(OPEN_METEO_URL, timeout=10) as response:
         data = json.loads(response.read().decode())
 
-    return data["hourly"]["precipitation_probability"][0]
+    rain_probabilities = data["hourly"]["precipitation_probability"]
+
+    return max(rain_probabilities)
 
 
 def update_firebase(drain_id, risk_score, status):
