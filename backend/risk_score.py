@@ -18,7 +18,7 @@ def calculate_risk(blockage, rain_score):
 
     # Status thresholds
    # Status thresholds
-if blockage > 75:
+if blockage > 75 or risk_score >= 70:
     status = "RED"
 elif risk_score >= 40:
     status = "YELLOW"
